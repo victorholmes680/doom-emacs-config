@@ -74,6 +74,10 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+;;
+
+
+;; 退出emacs不需要确认
 (setq confirm-kill-emacs nil)
 
 ;; 终端下开启鼠标支持
@@ -97,10 +101,16 @@
         (java  . ("https://github.com/tree-sitter/tree-sitter-java"))
         (json  . ("https://github.com/tree-sitter/tree-sitter-json"))
         (python . ("https://github.com/tree-sitter/tree-sitter-python"))))
+
+;; 设置jdtls的jdk环境
 (after! lsp-java
   (setq lsp-java-java-path "~/.sdkman/candidates/java/21.0.9-amzn/bin/java")
   )
+
+;; 定位项目根目录， 方便jdtls识别
 (setq lsp-auto-guess-root t)
+
+;; lombok注解识别
 (after! lsp-java
   (setq lsp-java-vmargs
         (list
@@ -108,3 +118,5 @@
          (concat "-javaagent:" (expand-file-name "~/.local/share/lombok.jar"))
          (concat "-Xbootclasspath/a:" (expand-file-name "~/.local/share/lombok.jar")))))
 
+;;(after! treemacs
+;;  (treemacs-follow-mode 1))
