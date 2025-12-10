@@ -103,17 +103,43 @@
         (python . ("https://github.com/tree-sitter/tree-sitter-python"))))
 
 ;; 设置jdtls的jdk环境
-(after! lsp-java
-  (setq lsp-java-java-path "~/.sdkman/candidates/java/21.0.9-amzn/bin/java")
-  )
+;;(after! lsp-java
+;;  (setq lsp-java-java-path "~/.sdkman/candidates/java/21.0.9-amzn/bin/java")
+;;  )
 
 ;; 定位项目根目录， 方便jdtls识别
-(setq lsp-auto-guess-root t)
+;;(setq lsp-auto-guess-root t)
 
 ;; lombok注解识别
-(after! lsp-java
-  (setq lsp-java-vmargs
-        (list
-         "-Xmx2G"
-         (concat "-javaagent:" (expand-file-name "~/.local/share/lombok.jar"))
-         (concat "-Xbootclasspath/a:" (expand-file-name "~/.local/share/lombok.jar")))))
+;;(after! lsp-java
+;;  (setq lsp-java-vmargs
+;;        (list
+;;         "-Xmx2G"
+;;         (concat "-javaagent:" (expand-file-name "~/.local/share/lombok.jar"))
+;;         (concat "-Xbootclasspath/a:" (expand-file-name "~/.local/share/lombok.jar")))))
+;;(after! eglot
+;;  ;; 强制让 JDTLS 使用 Java 21
+;;  (setenv "JAVA_HOME" (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn"))
+;;  (setenv "PATH" (concat (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn/bin:")
+;;                         (getenv "PATH")))
+;;
+;;  (add-to-list 'eglot-server-programs
+;;               '(java-mode
+;;                 . ("jdtls"
+;;                    "-vm" "~/.sdkman/candidates/java/21.0.9-amzn/bin/java"))))
+;;
+;;
+;;
+
+(after! eglot
+  (setenv "JAVA_HOME" (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn"))
+  (setenv "PATH" (concat (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn/bin:")
+                         (getenv "PATH")))
+
+  (defvar lombok (expand-file-name "~/.local/share/lombok.jar"))
+
+  (add-to-list
+   'eglot-server-programs
+   `(java-mode . ("jdtls"
+                  ,(concat "--jvm-arg=-javaagent:" lombok)
+                  ,(concat "--jvm-arg=-Xbootclasspath/a:" lombok)))))
