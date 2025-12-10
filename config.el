@@ -117,6 +117,3 @@
          "-Xmx2G"
          (concat "-javaagent:" (expand-file-name "~/.local/share/lombok.jar"))
          (concat "-Xbootclasspath/a:" (expand-file-name "~/.local/share/lombok.jar")))))
-
-;;(after! treemacs
-;;  (treemacs-follow-mode 1))
