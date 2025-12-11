@@ -95,13 +95,13 @@
   ;; ------------------------------
 ;; Tree-sitter grammar sources
 ;; ------------------------------
-(setq treesit-language-source-alist
-      '((c     . ("https://github.com/tree-sitter/tree-sitter-c"))
-        (cpp   . ("https://github.com/tree-sitter/tree-sitter-cpp"))
-        (java  . ("https://github.com/tree-sitter/tree-sitter-java"))
-        (json  . ("https://github.com/tree-sitter/tree-sitter-json"))
-        (python . ("https://github.com/tree-sitter/tree-sitter-python"))))
-
+;;(setq treesit-language-source-alist
+;;      '((c     . ("https://github.com/tree-sitter/tree-sitter-c"))
+;;        (cpp   . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+;;        (java  . ("https://github.com/tree-sitter/tree-sitter-java"))
+;;        (json  . ("https://github.com/tree-sitter/tree-sitter-json"))
+;;        (python . ("https://github.com/tree-sitter/tree-sitter-python"))))
+;;
 ;; 设置jdtls的jdk环境
 ;;(after! lsp-java
 ;;  (setq lsp-java-java-path "~/.sdkman/candidates/java/21.0.9-amzn/bin/java")
@@ -130,7 +130,7 @@
 ;;
 ;;
 ;;
-
+;;(add-hook 'prog-mode-hook' #'eglot-ensure)
 (after! eglot
   (setenv "JAVA_HOME" (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn"))
   (setenv "PATH" (concat (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn/bin:")
@@ -143,3 +143,10 @@
    `(java-mode . ("jdtls"
                   ,(concat "--jvm-arg=-javaagent:" lombok)
                   ,(concat "--jvm-arg=-Xbootclasspath/a:" lombok)))))
+
+;; 为所有编程模式启用 eglot，确保语法高亮和 LSP 功能正常工作
+(add-hook 'prog-mode-hook #'eglot-ensure)
+
+;; 确保字体锁定（语法高亮）在所有模式下启用
+(global-font-lock-mode 1)
+(setq font-lock-maximum-decoration t)
