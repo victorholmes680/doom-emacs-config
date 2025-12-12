@@ -150,3 +150,12 @@
 ;; 确保字体锁定（语法高亮）在所有模式下启用
 (global-font-lock-mode 1)
 (setq font-lock-maximum-decoration t)
+
+;; 函数折叠
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(map! "C-x t t" #'treemacs)
+
+(after! treemacs
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t))
