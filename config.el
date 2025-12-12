@@ -157,5 +157,27 @@
 (map! "C-x t t" #'treemacs)
 
 (after! treemacs
+  (global-set-key (kbd "M-0") #'treemacs-select-window)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t))
+
+;; --- macOS terminal clipboard integration ------------------------------
+(when (not (display-graphic-p))
+  ;; 将 Emacs 的剪切/复制发送到 macOS 剪贴板
+  (setq interprogram-cut-function
+        (lambda (text &optional push)
+          (let ((process-connection-type nil))
+            (let ((proc (start-process "pbcopy" nil "pbcopy")))
+              (process-send-string proc text)
+              (process-send-eof proc)))))
+
+  ;;;; 从 macOS 剪贴板粘贴到 Emacs
+  ;;(setq interprogram-paste-function
+  ;;      (lambda ()
+  ;;        (let ((clip (shell-command-to-string "pbpaste")))
+  ;;          ;; 去掉末尾的额外新行（可选）
+  ;;          (when (string-suffix-p "\n" clip)
+  ;;            (setq clip (substring clip 0 -1)))
+  ;;          clip)))
+  )
+;; ----------------------------------------------------------------------
