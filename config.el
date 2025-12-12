@@ -157,9 +157,12 @@
 (map! "C-x t t" #'treemacs)
 
 (after! treemacs
+  (setq treemacs-width 55)
   (global-set-key (kbd "M-0") #'treemacs-select-window)
   (treemacs-follow-mode t)
+  (setq treemacs-collapse-dirs 3)
   (treemacs-filewatch-mode t))
+
 
 ;; --- macOS terminal clipboard integration ------------------------------
 (when (not (display-graphic-p))
