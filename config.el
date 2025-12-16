@@ -131,25 +131,55 @@
 ;;
 ;;
 ;;(add-hook 'prog-mode-hook' #'eglot-ensure)
-(after! eglot
+;; Java LSP configuration with lsp-mode
+(after! lsp-java
+  ;; 设置jdtls的jdk环境
+  (setq lsp-java-java-path "~/.sdkman/candidates/java/21.0.9-amzn/bin/java")
+
+  ;; 定位项目根目录，方便jdtls识别
+  (setq lsp-auto-guess-root t)
+
+  ;; lombok注解识别
+  (setq lsp-java-vmargs
+        (list
+         "-Xmx2G"
+         (concat "-javaagent:" (expand-file-name "~/.local/share/lombok.jar"))
+         (concat "-Xbootclasspath/a:" (expand-file-name "~/.local/share/lombok.jar"))))
+
+  ;; 强制让 JDTLS 使用 Java 21
   (setenv "JAVA_HOME" (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn"))
   (setenv "PATH" (concat (expand-file-name "~/.sdkman/candidates/java/21.0.9-amzn/bin:")
-                         (getenv "PATH")))
+                         (getenv "PATH"))))
 
-  (defvar lombok (expand-file-name "~/.local/share/lombok.jar"))
+;; General LSP configuration
+(after! lsp-mode
+  ;; General LSP settings
+  (setq lsp-auto-guess-root t)
+  (setq lsp-prefer-capf t)
+  (setq lsp-completion-provider :capf)
+  (setq lsp-enable-file-watchers t)
+  (setq lsp-file-watch-threshold 1000)
+  (setq lsp-idle-delay 0.1)
+  (setq lsp-log-io nil)  ; Set to t for debugging
+  (setq lsp-signature-auto-activate nil)
+  (setq lsp-signature-render-document t)
+  (setq lsp-semantic-highlighting t)
+  (setq lsp-enable-snippet nil)
+  (setq lsp-modeline-code-actions-enable t)
+  (setq lsp-modeline-diagnostics-enable t)
+  (setq lsp-enable-folding nil)
+  (setq lsp-enable-links nil)
+  (setq lsp-enable-symbol-highlighting t)
+  (setq lsp-enable-text-document-sync t)
+  (setq lsp-restart 'auto-restart)
+  (setq lsp-response-timeout 5))
 
-  (add-to-list
-   'eglot-server-programs
-   `(java-mode . ("jdtls"
-                  ,(concat "--jvm-arg=-javaagent:" lombok)
-                  ,(concat "--jvm-arg=-Xbootclasspath/a:" lombok)))))
-
-;; 为所有编程模式启用 eglot，确保语法高亮和 LSP 功能正常工作
-(add-hook 'prog-mode-hook #'eglot-ensure)
+;; 为所有编程模式启用 LSP，确保语法高亮和 LSP 功能正常工作
+;; lsp-mode automatically enables LSP for supported languages
 
 ;; 确保字体锁定（语法高亮）在所有模式下启用
-(global-font-lock-mode 1)
-(setq font-lock-maximum-decoration t)
+;;(global-font-lock-mode 1)
+;;(setq font-lock-maximum-decoration t)
 
 ;; 函数折叠
 (add-hook 'prog-mode-hook #'hs-minor-mode)
@@ -184,4 +214,5 @@
   ;;          clip)))
   )
 ;; ----------------------------------------------------------------------
-(setq-default eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
+;; lsp-mode has different ways to handle document on type formatting
+;; Use lsp-ui if you need this functionality
