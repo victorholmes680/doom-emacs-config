@@ -184,3 +184,4 @@
   ;;          clip)))
   )
 ;; ----------------------------------------------------------------------
+(setq-default eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
